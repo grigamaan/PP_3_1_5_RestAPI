@@ -7,7 +7,8 @@
 <body>
 <h2>User Page</h2>
 <p th:text="'Id: ' + ${user.id}"></p>
-<p th:text="'User Name: ' + ${user.username}"></p>
+<p th:text="'User Name: ' + ${user.firstName}"></p>
+<p th:text="'User LastName: ' + ${user.lastName}"></p>
 <p th:text="'Email: ' + ${user.email}"></p>
 <br/>
 <a href="/logout">Log out</a>
