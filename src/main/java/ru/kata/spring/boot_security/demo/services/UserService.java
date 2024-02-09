@@ -46,6 +46,7 @@ public class UserService implements UserDetailsService{
         if (userFromDB != null) {
             userFromDB.setFirstName(user.getFirstName());
             userFromDB.setLastName(user.getLastName());
+            userFromDB.setAge(user.getAge());
             userFromDB.setEmail(user.getEmail());
             userFromDB.setRoles(user.getRoles());
             if (!userFromDB.getPassword().equals(user.getPassword())) {

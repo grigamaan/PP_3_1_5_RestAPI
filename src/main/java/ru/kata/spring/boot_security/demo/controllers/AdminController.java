@@ -2,6 +2,8 @@ package ru.kata.spring.boot_security.demo.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,16 +28,14 @@ public class AdminController {
     private RoleService roleService;
 
     @GetMapping("/admin")
-    public String userList(Model model) {
+    public String userList(@AuthenticationPrincipal UserDetails userDetails, Model model,
+                           @ModelAttribute("newUser") User newUser) {
+        User currentUser = userService.findByEmail(userDetails.getUsername());
+        model.addAttribute("currentUser", currentUser);
         model.addAttribute("allUsers", userService.allUsers());
-        return "admin";
-    }
-
-    @GetMapping("/admin/edit/{id}")
-    public String edit(Model model, @PathVariable("id") Long id, Model roles) {
-        model.addAttribute("user", userService.findUserById(id));
         model.addAttribute("allRoles", roleService.getAllRoles());
-        return "edit";
+        model.addAttribute("newUser", newUser);
+        return "admin";
     }
 
     @PatchMapping("/admin/{id}")
@@ -44,16 +44,10 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/new")
-    public String newUser(@ModelAttribute("user") User user, Model model) {
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        return "new";
-    }
-
     @PostMapping("/admin")
     public String addNewUser(@ModelAttribute("user") @Valid User user) {
         userService.addUser(user);
-        return "admin";
+        return "redirect:/admin";
     }
 
     @DeleteMapping("/admin/{id}")
@@ -62,9 +56,4 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/admin/gt/{userId}")
-    public String gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.findUserById(userId));
-        return "admin";
-    }
 }
