@@ -41,8 +41,8 @@ public class UserService implements UserDetailsService{
     }
 
     @Transactional
-    public boolean saveUser(Long id, User user) {
-        User userFromDB = userRepository.findById(id).orElse(null);
+    public boolean saveUser(User user) {
+        User userFromDB = userRepository.findById(user.getId()).orElse(null);
         if (userFromDB != null) {
             userFromDB.setFirstName(user.getFirstName());
             userFromDB.setLastName(user.getLastName());
@@ -55,7 +55,7 @@ public class UserService implements UserDetailsService{
             }
         } else {
             throw new UsernameNotFoundException(
-                    String.format("User with id: %s not found", id));
+                    String.format("User with id: %s not found", user.getId()));
         }
         return true;
     }

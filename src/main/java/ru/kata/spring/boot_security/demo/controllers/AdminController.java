@@ -6,7 +6,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import ru.kata.spring.boot_security.demo.entities.Role;
 import ru.kata.spring.boot_security.demo.entities.User;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
@@ -14,6 +16,7 @@ import ru.kata.spring.boot_security.demo.services.UserService;
 import ru.kata.spring.boot_security.demo.services.RoleService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,24 +39,6 @@ public class AdminController {
         model.addAttribute("allRoles", roleService.getAllRoles());
         model.addAttribute("newUser", newUser);
         return "admin";
-    }
-
-    @PatchMapping("/admin/{id}")
-    public String update(@ModelAttribute("user") @Valid User user, @PathVariable("id") Long id) {
-        userService.saveUser(id, user);
-        return "redirect:/admin";
-    }
-
-    @PostMapping("/admin")
-    public String addNewUser(@ModelAttribute("user") @Valid User user) {
-        userService.addUser(user);
-        return "redirect:/admin";
-    }
-
-    @DeleteMapping("/admin/{id}")
-    public String delete(@PathVariable("id") Long id) {
-        userService.deleteUser(id);
-        return "redirect:/admin";
     }
 
 }
