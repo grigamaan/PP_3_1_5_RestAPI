@@ -62,11 +62,11 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td style="text-align: center;" th:text="${user.getId}"></td>
+                            <td style="text-align: center;" th:text="${user.getId()}"></td>
                             <td th:text="${user.getFirstName()}"></td>
                             <td th:text="${user.getLastName()}"></td>
                             <td style="text-align: center;" th:text="${user.getAge()}"></td>
-                            <td th:text="${user.getEmail}"></td>
+                            <td th:text="${user.getEmail()}"></td>
                             <td style="text-align: center;">            <span th:object="${user}" th:each="userRole,iterStat: ${user.getRoles()} "
                                                   th:text="${userRole.name.replace('ROLE_', '')} + ${iterStat.last ? '' : ', '}" > VALUE</span>
                             </td>
