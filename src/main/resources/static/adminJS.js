@@ -1,4 +1,5 @@
 const URL = "http://localhost:8080/api";
+const URL_INFO = "http://localhost:8080/userinfo";
 
 const roleList = []
 $(document).ready( function () {
@@ -161,4 +162,33 @@ function deleteModal(id) {
         })
     })
 }
+
+async function getPage() {
+    try {
+        const response = await fetch(URL_INFO);
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const user = await response.json();
+        getHeader(user);
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function getHeader(user) {
+    const usernameElement = document.getElementById("top-username");
+    const roleElement = document.getElementById("top-role");
+
+    usernameElement.textContent = user.email;
+
+    let roles = '';
+    user.roles.forEach(role => {
+        roles += role.name.replace("ROLE_", '') + ' ';
+    });
+
+    roleElement.textContent = roles.trim();
+}
+getPage();
 

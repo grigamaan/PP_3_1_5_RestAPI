@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import ru.kata.spring.boot_security.demo.services.RoleService;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -71,30 +73,9 @@ public class RestApiController {
         return ResponseEntity.ok((roleService.getAllRoles()).stream().toList());
     }
 
-    @GetMapping("/admin")
-    public ModelAndView userList(@AuthenticationPrincipal UserDetails userDetails, Model model,
-                                 @ModelAttribute("newUser") User newUser) {
-        ModelAndView admin = new ModelAndView("admin");
-        User currentUser = userService.findByEmail(userDetails.getUsername());
-        model.addAttribute("currentUser", currentUser);
-        model.addAttribute("allUsers", userService.allUsers());
-        model.addAttribute("allRoles", roleService.getAllRoles());
-        model.addAttribute("newUser", newUser);
-        return admin;
+    @GetMapping("/userinfo")
+    public ResponseEntity<User> showUser(Principal principal) {
+        return new ResponseEntity<> (userService.findByEmail(principal.getName()), HttpStatus.OK);
     }
 
-    @GetMapping("/user")
-    public ModelAndView userPage(Authentication authentication, Model model) {
-        ModelAndView modelAndView = new ModelAndView("user");
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userService.findByEmail(userDetails.getUsername());
-        model.addAttribute("user", user);
-        return modelAndView;
-    }
-
-    @GetMapping("/login")
-    ModelAndView login() {
-        ModelAndView log = new ModelAndView("login");
-        return log;
-    }
 }

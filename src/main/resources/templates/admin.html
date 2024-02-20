@@ -11,12 +11,12 @@
 <header>
     <div class="p-3 bg-dark text-white">
         <form th:action="@{/logout}" method="post">
-            <strong class="text-white" style="font-size: 1.5em" th:utext="${currentUser.getEmail()}">
+            <strong class="text-white" style="font-size: 1.5em" id="top-username">
             </strong>
-            <span class="text-white">with roles: </span>
-            <div class="text-white me-auto d-inline-block" th:each="role, iterStat: ${currentUser.getRoles()}">
+            <span class="text-white" >with roles: </span>
+            <div class="text-white me-auto d-inline-block">
                     <span class="text-white"
-                          th:text="${role.getName().replace('ROLE_','')} + ${iterStat.last ? '' : ', '}">
+                          id="top-role">
                     </span>
             </div>
             <button type="submit" class="btn btn-light float-end">Log out</button>
